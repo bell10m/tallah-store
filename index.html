@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر طَلّــة | TALLAH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --dark: #1a1a1a; --light: #f9f9f9; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--light); margin: 0; padding-bottom: 80px; }
+        header { background: white; text-align: center; padding: 20px; border-bottom: 2px solid var(--gold); }
+        .logo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: #eee; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold); overflow: hidden; }
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        h1 { color: var(--dark); margin: 10px 0; letter-spacing: 2px; }
+        .intro { padding: 0 20px; color: #666; font-size: 0.9rem; }
+
+        .tabs { display: flex; justify-content: space-around; background: var(--dark); position: sticky; top: 0; z-index: 100; }
+        .tab-btn { color: white; border: none; background: none; padding: 15px; cursor: pointer; font-size: 1rem; flex: 1; transition: 0.3s; font-family: 'Tajawal'; }
+        .tab-btn.active { border-bottom: 3px solid var(--gold); color: var(--gold); }
+
+        .content-section { display: none; padding: 20px; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .card img { width: 100%; border-radius: 8px; margin-bottom: 10px; }
+        .price { color: var(--gold); font-weight: bold; font-size: 1.1rem; }
+        button.add-btn { background: var(--dark); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+
+        .shein-input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+
+        .cart-summary { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .send-btn { background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-placeholder">
+        <!-- ضعي رابط صورتك هنا في src -->
+        <img src="logo.png" alt="TALLAH Logo">
+    </div>
+    <h1>طَلّــة | TALLAH</h1>
+    <div class="intro">
+        أهلاً بكِ في متجر طَلّـــــــة ✨..<br>
+        هنا بنشارك أجمل تنسيقات شي إن، وأسرار العناية، ونقاباتنا المميزة. 🕊️
+        <br><b>نورتوني!</b>
+    </div>
+</header>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="openTab('niqab')">النقابات</button>
+    <button class="tab-btn" onclick="openTab('care')">عناية</button>
+    <button class="tab-btn" onclick="openTab('shein')">شي إن</button>
+</div>
+
+<!-- قسم النقابات -->
+<div id="niqab" class="content-section active">
+    <h3>نقابات براند ميار</h3>
+    <div class="card">
+        <img src="niqab_placeholder.jpg" alt="نقاب">
+        <p>نقاب ملكي بجميع المقاسات</p>
+        <p class="price">2000 ريال يمني</p>
+        <select id="niqab-size" class="shein-input">
+            <option value="صغير">مقاس صغير</option>
+            <option value="وسط">مقاس وسط</option>
+            <option value="كبير">مقاس كبير</option>
+        </select>
+        <button class="add-btn" onclick="addToCart('نقاب ميار', 2000, 'niqab-size')">إضافة للسلة 🛒</button>
+    </div>
+</div>
+
+<!-- قسم العناية -->
+<div id="care" class="content-section">
+    <h3>أسرار العناية</h3>
+    <p>قريباً سيتم إضافة منتجات العناية المختارة بعناية..</p>
+</div>
+
+<!-- قسم شي إن -->
+<div id="shein" class="content-section">
+    <h3>تنسيقات شي إن</h3>
+    <div class="card">
+        <p>انسخي رابط المنتج من تطبيق شي إن وضعيه هنا:</p>
+        <input type="text" id="shein-link" class="shein-input" placeholder="رابط المنتج أو الكود">
+        <input type="text" id="shein-desc" class="shein-input" placeholder="اللون والمقاس">
+        <input type="number" id="shein-qty" class="shein-input" placeholder="الكمية" value="1">
+        <button class="add-btn" onclick="addShein()">إضافة للطلب ➕</button>
+    </div>
+</div>
+
+<!-- نموذج البيانات -->
+<div id="checkout" class="content-section" style="display: block; background: #eee; margin-top: 20px;">
+    <h3>تثبيت الطلب</h3>
+    <div class="form-group">
+        <label>الاسم الأول *</label>
+        <input type="text" id="fname" required>
+    </div>
+    <div class="form-group">
+        <label>اسم الأب *</label>
+        <input type="text" id="mname" required>
+    </div>
+    <div class="form-group">
+        <label>اللقب *</label>
+        <input type="text" id="lname" required>
+    </div>
+    <div class="form-group">
+        <label>رقم التواصل *</label>
+        <input type="tel" id="phone" required>
+    </div>
+    <div class="form-group">
+        <label>وصف إضافي أو ملاحظات</label>
+        <textarea id="notes"></textarea>
+    </div>
+</div>
+
+<div class="cart-summary">
+    <div>إجمالي السلة: <span id="total-price">0</span> ر.ي</div>
+    <button class="send-btn" onclick="sendToWhatsapp()">تثبيت الطلب عبر واتساب ✅</button>
+</div>
+
+<script>
+    let cart = { niqab: [], care: [], shein: [] };
+    let total = 0;
+
+    function openTab(tabName) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function addToCart(name, price, sizeId) {
+        let size = document.getElementById(sizeId).value;
+        cart.niqab.push({name, price, size});
+        total += price;
+        updateTotal();
+        alert('تمت الإضافة للسلة');
+    }
+
+    function addShein() {
+        let link = document.getElementById('shein-link').value;
+        let desc = document.getElementById('shein-desc').value;
+        let qty = document.getElementById('shein-qty').value;
+        if(!link) return alert('الرجاء وضع رابط المنتج');
+        cart.shein.push({link, desc, qty});
+        updateTotal();
+        alert('تم إضافة طلب شي إن');
+    }
+
+    function updateTotal() {
+        document.getElementById('total-price').innerText = total;
+    }
+
+    function sendToWhatsapp() {
+        let fname = document.getElementById('fname').value;
+        let mname = document.getElementById('mname').value;
+        let lname = document.getElementById('lname').value;
+        let phone = document.getElementById('phone').value;
+        let notes = document.getElementById('notes').value;
+
+        if(!fname || !mname || !lname || !phone) return alert('الرجاء إكمال البيانات الإجبارية');
+
+        let msg = `*طلب جديد من متجر طَلّــة*\n\n`;
+        msg += `*العميل:* ${fname} ${mname} ${lname}\n`;
+        msg += `*الجوال:* ${phone}\n\n`;
+
+        if(cart.niqab.length > 0) {
+            msg += `*🧕 قسم النقابات:*\n`;
+            cart.niqab.forEach(item => {
+                msg += `- ${item.name} (${item.size}) - ${item.price} ر.ي\n`;
+            });
+        }
+
+        if(cart.shein.length > 0) {
+            msg += `\n*🛍️ طلبات شي إن:*\n`;
+            cart.shein.forEach(item => {
+                msg += `- الرابط: ${item.link}\n  الوصف: ${item.desc} | العدد: ${item.qty}\n`;
+            });
+        }
+
+        msg += `\n*💰 المجموع الإجمالي: ${total} ر.ي*\n`;
+        if(notes) msg += `\n*📝 ملاحظات:* ${notes}`;
+
+        let whatsappUrl = `https://wa.me/967779605053?text=${encodeURIComponent(msg)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
+
+</body>
+</html>
